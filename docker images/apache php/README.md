@@ -2,6 +2,7 @@
 
 ## Описание версий страниц
 
+- **example-index.php** - пример-шаблон.
 - **index-v1.0.php** — Базовая страница с выводом IP-адреса сервера и автором.
 - **index-v1.1.php** — Изменён градиент фона, добавлен зелёный цвет для версии.
 - **index-v1.2.php** — Новый градиент (жёлто-зелёный), версия 1.2.
@@ -12,8 +13,8 @@
 
 1. **Создайте Dockerfile** (пример в папках):
 
-- dockerfile-almalinux - Dockerfile на основе almalinux.
-- dockerfile-alpine - Dockerfile на основе alpine (образ будет в 2 раза меньше).
+- `dockerfile-almalinux` - Dockerfile на основе almalinux.
+- `dockerfile-alpine` - Dockerfile на основе alpine (образ будет в разы меньше чем на almalinux).
 
 2. **Соберите образ:**
 
