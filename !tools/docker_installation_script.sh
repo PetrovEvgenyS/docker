@@ -1,17 +1,20 @@
 #!/bin/bash
 
 ### ЦВЕТА ##
-ESC=$(printf '\033') RESET="${ESC}[0m" BLACK="${ESC}[30m" RED="${ESC}[31m"
-GREEN="${ESC}[32m" YELLOW="${ESC}[33m" BLUE="${ESC}[34m" MAGENTA="${ESC}[35m"
-CYAN="${ESC}[36m" WHITE="${ESC}[37m" DEFAULT="${ESC}[39m"
+ESC=$(printf '\033') RESET="${ESC}[0m" MAGENTA="${ESC}[35m" RED="${ESC}[31m" GREEN="${ESC}[32m"
 
-magentaprint() { printf "${MAGENTA}%s${RESET}\n" "$1"; }
-errorprint() { printf "${RED}%s${RESET}\n" "$@"; }
-greenprint() { printf "${GREEN}%s${RESET}\n" "$@"; }
+### Функции цветного вывода ##
+magentaprint() { echo; printf "${MAGENTA}%s${RESET}\n" "$1"; }
+errorprint() { echo; printf "${RED}%s${RESET}\n" "$1"; }
+greenprint() { echo; printf "${GREEN}%s${RESET}\n" "$1"; }
 
-# Проверка прав root
-if [ "$(id -u)" -ne 0 ]; then
-    errorprint "Этот скрипт должен запускаться с правами root или через sudo!"
+
+# ----------------------------------------------------------------------------------------------------
+
+
+# Проверка запуска через sudo
+if [ -z "$SUDO_USER" ]; then
+    errorprint "Пожалуйста, запустите скрипт через sudo."
     exit 1
 fi
 
@@ -31,9 +34,6 @@ install_docker_ubuntu() {
         errorprint "Ошибка при удалении старых версий Docker"
         exit 1
     }
-
-    # Обновление списка пакетов
-    apt update
 
     # Установка необходимых пакетов
     apt -y install apt-transport-https ca-certificates curl gnupg lsb-release expect
@@ -62,7 +62,7 @@ install_docker_almalinux() {
     dnf -y remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
 
     # Установка необходимых пакетов
-    dnf install -y yum-utils
+    dnf -y install yum-utils
 
     # Добавление репозитория Docker
     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
