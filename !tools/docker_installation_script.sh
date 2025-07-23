@@ -53,6 +53,9 @@ install_docker_ubuntu() {
 
     # Добавление пользователя в группу docker
     usermod -aG docker $SUDO_USER
+
+    # Вызов функции finish
+    finish
 }
 
 install_docker_almalinux() {
@@ -75,6 +78,21 @@ install_docker_almalinux() {
 
     # Добавление пользователя в группу docker
     usermod -aG docker $SUDO_USER
+
+    # Вызов функции finish
+    finish
+}
+
+finish() {
+    magentaprint "Статус службы Docker"
+    systemctl status docker --no-page
+
+    magentaprint "Версия Docker"
+    docker --version
+
+    greenprint "Docker успешно установлен на $OS."
+    magentaprint "Для применения изменений прав пользователя необходимо перелогиниться или выполнить: newgrp docker"
+    magentaprint "newgrp docker - позволяет запускать команды Docker без использования sudo и не перелогиниваться."
 }
 
 case "$OS" in
@@ -89,15 +107,3 @@ case "$OS" in
         exit 1
         ;;
 esac
-
-# Проверка установки
-echo " "
-
-if docker --version; then
-    greenprint "Docker успешно установлен на $OS."
-    magentaprint "Для применения изменений прав пользователя необходимо перелогиниться или выполнить: newgrp docker"
-    magentaprint "newgrp docker - позволяет запускать команды Docker без использования sudo и не перелогиниваться."
-else
-    errorprint "Ошибка установки Docker!"
-    exit 1
-fi
